@@ -23,3 +23,19 @@ def user(request, user_id):
     user = User.objects.get(pk=user_id)
     context = {'user': user}
     return render(request, 'website/user.html', context)
+
+
+def usersearch(request):
+    return render(request, 'website/usersearch.html')
+
+
+def shop(request):
+    return render(request, 'website/shop.html')
+
+
+def guilds(request):
+    return render(request, 'website/guilds.html')
+
+
+def forum(request):
+    return render(request, 'website/forum.html')
