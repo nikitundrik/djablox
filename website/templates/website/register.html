@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+<p>You already logged in, please, come back to <a href='/'>the home</a></p>
+{% else %}
+<h1>Registration</h1>
+<form method='post'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type='submit'>Register</button>
+</form>
+{% endif %}
+{% endblock %}
