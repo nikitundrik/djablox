@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
+from .models import *
 
 def home(request):
     return render(request, 'website/home.html')
@@ -16,3 +17,9 @@ class RegisterView(generic.CreateView):
 
 def games(request):
     return render(request, 'website/games.html')
+
+
+def user(request, user_id):
+    user = User.objects.get(pk=user_id)
+    context = {'user': user}
+    return render(request, 'website/user.html', context)
