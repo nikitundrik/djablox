@@ -1,0 +1,14 @@
+{% extends 'baseblog.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+{% for post in posts %}
+<h1><a href='/blog/posts/{{ post.id }}'>{{ post.title }}</a></h1>
+<hr>
+{% endfor %}
+{% if is_pp %}
+<a href='/blog/{{ previous_page }}'>Previous page</a>
+{% endif %}
+{% if is_np %}
+<a href='/blog/{{ next_page }}'>Next page</a>
+{% endif%}
+{% endblock %}
