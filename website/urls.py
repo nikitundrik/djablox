@@ -8,6 +8,7 @@ urlpatterns = [
     path('games', games, name='games'),
     path('user/<int:user_id>', user, name='userpage'),
     path('usersearch', usersearch, name='usersearch'),
+    path('users/', UsersView.as_view(), name='users'),
     path('shop', shop, name='shop'),
     path('guilds', guilds, name='guilds'),
     path('forum', forum, name='forum')

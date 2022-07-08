@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Users{% endblock %}
+{% block content %}
+<h1>Search results:</h1>
+{% for user in users %}
+<h2><a href='/user/{{ user.id }}'>{{ user.username }}</a></h2>
+<hr>
+{% endfor %}
+{% endblock %}

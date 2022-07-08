@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
+from django.db.models import Q
 
 from .models import *
 
@@ -27,6 +28,18 @@ def user(request, user_id):
 
 def usersearch(request):
     return render(request, 'website/usersearch.html')
+
+
+class UsersView(generic.ListView):
+    model = User
+    template_name = 'website/user_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_name = self.request.GET.get('q', '')
+        context['users'] = User.objects.filter(username__icontains=user_name)
+        return context
+
 
 
 def shop(request):
