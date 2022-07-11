@@ -14,7 +14,7 @@ class UserAdmin1(UserAdmin):
             'fields': ('username', 'password')
         }),
         ('Public info', {
-            'fields': ('description', 'owns')
+            'fields': ('description', 'owns', 'coin', 'materia')
         }),
         ('Personal info', {
             'fields': ('first_name', 'last_name', 'email')
@@ -31,3 +31,4 @@ class UserAdmin1(UserAdmin):
     )
 
 admin.site.register(User, UserAdmin1)
+admin.site.register(Item)

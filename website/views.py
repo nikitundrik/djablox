@@ -56,7 +56,9 @@ class UsersView(generic.ListView):
 
 
 def shop(request):
-    return render(request, 'website/shop.html')
+    items = Item.objects.order_by('id')[0:10]
+    context = {'items': items}
+    return render(request, 'website/shop.html', context)
 
 
 def guilds(request):
