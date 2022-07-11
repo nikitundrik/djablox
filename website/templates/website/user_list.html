@@ -6,4 +6,10 @@
 <h2><a href='/user/{{ user.id }}'>{{ user.username }}</a></h2>
 <hr>
 {% endfor %}
+{% if is_pp %}
+<a href='{{ previous_page }}'>Previous page</a>
+{% endif %}
+{% if is_np %}
+<a href='{{ next_page }}'>Next page</a>
+{% endif %}
 {% endblock %}

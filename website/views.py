@@ -37,7 +37,20 @@ class UsersView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_name = self.request.GET.get('q', '')
-        context['users'] = User.objects.filter(username__icontains=user_name)
+        page = int(self.request.GET.get('page', 0))
+        is_pp = False
+        is_np = False
+        previous_page = '/users/?q=' + user_name + '&page=' + str(page - 1)
+        next_page = '/users/?q=' + user_name + '&page=' + str(page + 1)
+        if page != 0:
+            is_pp = True
+        if len(User.objects.filter(username__icontains=user_name)) > 10 * (page + 1):
+            is_np = True
+        context['users'] = User.objects.filter(username__icontains=user_name)[1 * page:10 * (page + 1)]
+        context['is_pp'] = is_pp
+        context['is_np'] = is_np
+        context['previous_page'] = previous_page
+        context['next_page'] = next_page
         return context
 
 
