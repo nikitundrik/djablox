@@ -10,6 +10,7 @@ urlpatterns = [
     path('usersearch', usersearch, name='usersearch'),
     path('users/', UsersView.as_view(), name='users'),
     path('shop', shop, name='shop'),
+    path('item/<int:item_id>', item, name='item'),
     path('guilds', guilds, name='guilds'),
     path('forum', forum, name='forum')
 ]

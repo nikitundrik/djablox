@@ -56,9 +56,24 @@ class UsersView(generic.ListView):
 
 
 def shop(request):
-    items = Item.objects.order_by('id')[0:10]
-    context = {'items': items}
+    page = int(request.GET.get('page', 0))
+    is_pp = False
+    is_np = False
+    previous_page = '/shop?page=' + str(page - 1)
+    next_page = '/shop?page=' + str(page + 1)
+    items = Item.objects.order_by('id')[1 * page:10 * (page + 1)]
+    if page != 0:
+        is_pp = True
+    if len(Item.objects.order_by('id')) > 10 * (page + 1):
+        is_np = True
+    context = {'items': items, 'is_pp': is_pp, 'is_np': is_np, 'previous_page': previous_page, 'next_page': next_page}
     return render(request, 'website/shop.html', context)
+
+
+def item(request, item_id):
+    item = Item.objects.get(pk=item_id)
+    context = {'item': item}
+    return render(request, 'website/item.html', context)
 
 
 def guilds(request):

@@ -4,9 +4,15 @@
 {% block content %}
 <h1>Shop</h1>
 {% for item in items %}
-<h2>{{ item.name }}</h2>
+<h2><a href='/item/{{ item.id }}'>{{ item.name }}</a></h2>
 <img src="/static/website/{{ item.image }}">
 <p>{{ item.price }}</p>
 <hr>
 {% endfor %}
+{% if is_pp %}
+<a href='{{ previous_page }}'>Previous page</a>
+{% endif %}
+{% if is_np %}
+<a href='{{ next_page }}'>Next page</a>
+{% endif %}
 {% endblock %}
