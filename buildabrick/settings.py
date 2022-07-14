@@ -25,7 +25,7 @@ SECRET_KEY = ')!%!9b2^v4%jiuz(#8@#j3iu6g43^8!72im-)z6+h)+ei0$_ty'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['buildabrick.loca.lt']
 
 
 # Application definition

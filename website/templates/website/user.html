@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}{{ user.username }}{% endblock %}
+{% block title %}{{ user1.username }}{% endblock %}
 {% block content %}
-<h1>{{ user.username }}</h1>
+<h1>{{ user1.username }}</h1>
 <img src="{% static "website/player.png" %}" width="200" height="200">
-<p>{{ user.description }}</p>
+<p>{{ user1.description }}</p>
 {% endblock %}

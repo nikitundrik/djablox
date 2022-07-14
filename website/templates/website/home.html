@@ -3,11 +3,9 @@
 {% block content %}
 {% if user.is_authenticated %}
 <h1>Hello, {{ user.username }}!</h1>
-<a href='/logout'>Log out</a>
 {% else %}
 <h1>Welcome to Buildabrick!</h1>
 <p>Buildabrick is a community where you can create games, socialize and more!</p>
-<p><a href='/register'>Consider registering</a> or <a href='/login'>Log in</a></p>
 {% endif %}
 <p>The website is in development, while you wait, check out <a href='/blog'>our blog</a> and <a href='https://discord.gg/F4Wyr4eGXF'>our Discord server</a></p>
 {% endblock %}

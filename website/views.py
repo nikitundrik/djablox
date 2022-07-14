@@ -22,7 +22,7 @@ def games(request):
 
 def user(request, user_id):
     user = User.objects.get(pk=user_id)
-    context = {'user': user}
+    context = {'user1': user}
     return render(request, 'website/user.html', context)
 
 
