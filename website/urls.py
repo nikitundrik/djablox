@@ -11,6 +11,8 @@ urlpatterns = [
     path('users/', UsersView.as_view(), name='users'),
     path('shop', shop, name='shop'),
     path('item/<int:item_id>', item, name='item'),
+    path('buy/<int:item_id>', buy, name='buy'),
+    path('nemoney', nemoney, name='nemoney'),
     path('guilds', guilds, name='guilds'),
     path('forum', forum, name='forum')
 ]

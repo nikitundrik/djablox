@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.db.models import Q
@@ -74,6 +74,33 @@ def item(request, item_id):
     item = Item.objects.get(pk=item_id)
     context = {'item': item}
     return render(request, 'website/item.html', context)
+
+
+def buy(request, item_id):
+    item = Item.objects.get(pk=item_id)
+    price = item.price.split(' ')
+    coin_price = int(price[0])
+    materia_price = None
+    if len(price) > 2:
+        materia_price = int(price[2])
+    user_coins = request.user.coin
+    user_materia = request.user.materia
+    if materia_price is None:
+        if user_coins > coin_price:
+            request.user.owns += item.name + ', '
+            return redirect('/user/' + str(request.user.id))
+        else:
+            return redirect('/nemoney')
+    else:
+        if user_coins > coin_price and user_materia > materia_price:
+            request.user.owns += item.name + ', '
+            return redirect('/user/' + str(request.user.id))
+        else:
+            return redirect('/nemoney')
+
+
+def nemoney(request):
+    return render(request, 'website/nemoney.html')
 
 
 def guilds(request):
