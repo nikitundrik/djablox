@@ -87,13 +87,18 @@ def buy(request, item_id):
     user_materia = request.user.materia
     if materia_price is None:
         if user_coins > coin_price:
+            request.user.coin -= coin_price
             request.user.owns += item.name + ', '
+            request.user.save()
             return redirect('/user/' + str(request.user.id))
         else:
             return redirect('/nemoney')
     else:
         if user_coins > coin_price and user_materia > materia_price:
+            request.user.coin -= coin_price
+            request.user.materia -= materia_price
             request.user.owns += item.name + ', '
+            request.user.save()
             return redirect('/user/' + str(request.user.id))
         else:
             return redirect('/nemoney')
