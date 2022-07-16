@@ -114,3 +114,14 @@ def guilds(request):
 
 def forum(request):
     return render(request, 'website/forum.html')
+
+
+def settings(request):
+    return render(request, 'website/settings.html')
+
+
+def applysettings(request):
+    about_me = request.POST['aboutme']
+    request.user.description = about_me
+    request.user.save()
+    return redirect('user/' + str(request.user.id))

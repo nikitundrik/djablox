@@ -14,5 +14,7 @@ urlpatterns = [
     path('buy/<int:item_id>', buy, name='buy'),
     path('nemoney', nemoney, name='nemoney'),
     path('guilds', guilds, name='guilds'),
-    path('forum', forum, name='forum')
+    path('forum', forum, name='forum'),
+    path('settings', settings, name='settings'),
+    path('applysettings', applysettings, name='applysettings')
 ]

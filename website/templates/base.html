@@ -41,9 +41,12 @@
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <ul class="nav navbar-nav">
-                    <li><a href='user/{{ user.id }}'>Profile</a></li>
-                    <li><a href='friends'>Friends</a></li>
-                    <li><a href='messages'>Messages</a></li>
+                    <li><a href='/user/{{ user.id }}'>Profile</a></li>
+                    <li><a href='/friends'>Friends</a></li>
+                    <li><a href='/messages'>Messages</a></li>
+                    <li><a href='/settings'>Settings</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
                     <li><a href='/balance'>{{ user.coin }} coins {{ user.materia }} materia</a></li>
                 </ul>
             </div>

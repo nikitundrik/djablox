@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h1>Settings</h1>
+<form action='/applysettings' method='post'>
+    {% csrf_token %}
+    <p>"About me" section</p>
+    <textarea rows='5' cols='50' name='aboutme' placeholder='About me'></textarea>
+    <input type="submit" value="Apply">
+</form>
+{% endblock %}
