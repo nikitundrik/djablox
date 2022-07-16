@@ -18,3 +18,9 @@ class Item(models.Model):
 
     def __str__(self):
         return self.name
+
+class Message(models.Model):
+    sender = models.CharField(max_length=150)
+    receiver = models.CharField(max_length=150)
+    title = models.CharField(max_length=150)
+    content = models.TextField()

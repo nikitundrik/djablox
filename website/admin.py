@@ -32,3 +32,4 @@ class UserAdmin1(UserAdmin):
 
 admin.site.register(User, UserAdmin1)
 admin.site.register(Item)
+admin.site.register(Message)

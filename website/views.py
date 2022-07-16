@@ -1,17 +1,19 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.dispatch import receiver
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.db.models import Q
 
 from .models import *
+from .forms import *
 
 def home(request):
     return render(request, 'website/home.html')
 
 
 class RegisterView(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = UserCreationForm1
     success_url = reverse_lazy('login')
     template_name = 'website/register.html'
 
@@ -114,6 +116,16 @@ def guilds(request):
 
 def forum(request):
     return render(request, 'website/forum.html')
+
+
+def messages(request):
+    return render(request, 'website/messages.html')
+
+
+def sendmessage(request):
+    message = Message(sender=request.user.username, receiver=request.POST['receiver'], title=request.POST['title'], content=request.POST['content'])
+    message.save()
+    return redirect('/messages')
 
 
 def settings(request):

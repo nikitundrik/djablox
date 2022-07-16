@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Messages{% endblock %}
+{% block content %}
+<h1>Messages</h1>
+<h2>Send a message</h2>
+<form action='/sendmessage' method='post'>
+    {% csrf_token %}
+    <p>Receiver</p>
+    <input type='text' id='receiver' name='receiver'>
+    <p>Title</p>
+    <input type='text' id='title' name='title'>
+    <p>Content</p>
+    <textarea rows='5' cols='50' name='content' placeholder='Content'></textarea>
+    <input type='submit' value='Send'>
+</form>
+<h2>Messages received:</h2>
+<h2>Messages sent:</h2>
+{% endblock %}
