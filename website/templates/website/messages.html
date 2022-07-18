@@ -14,5 +14,30 @@
     <input type='submit' value='Send'>
 </form>
 <h2>Messages received:</h2>
+{% for message in received %}
+<h3>{{ message.title }}</h3>
+<p>By {{ message.sender }}</p>
+<p>{{ message.content }}</p>
+<hr>
+{% endfor %}
+{% if is_rpp %}
+<a href='{{ rprevious_page }}'>Previous page</a>
+{% endif %}
+{% if is_rnp %}
+<a href='{{ rnext_page }}'>Previous page</a>
+{% endif %}
 <h2>Messages sent:</h2>
+{% for message in sent %}
+<h3>{{ message.title }}</h3>
+<p>By {{ message.sender }}</p>
+<p>To {{ message.receiver }}</p>
+<p>{{ message.content }}</p>
+<hr>
+{% endfor %}
+{% if is_spp %}
+<a href='{{ sprevious_page }}'>Previous page</a>
+{% endif %}
+{% if is_snp %}
+<a href='{{ snext_page }}'>Previous page</a>
+{% endif %}
 {% endblock %}

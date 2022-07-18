@@ -1,9 +1,6 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.dispatch import receiver
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic
-from django.db.models import Q
 
 from .models import *
 from .forms import *
@@ -119,7 +116,21 @@ def forum(request):
 
 
 def messages(request):
-    return render(request, 'website/messages.html')
+    received_page = int(request.GET.get('received', 0))
+    sent_page = int(request.GET.get('sent', 0))
+    received = Message.objects.filter(receiver__icontains=request.user.username)[1 * received_page:10 * (received_page + 1)]
+    sent = Message.objects.filter(sender__icontains=request.user.username)[1 * sent_page:10 * (sent_page + 1)]
+    is_rpp = False
+    is_rnp = False
+    is_spp = False
+    is_snp = False
+    rprevious_page = 'messages/?received=' + str(received_page - 1) + '&sent=' + str(sent_page)
+    rnext_page = 'messages/?received=' + str(received_page + 1) + '&sent=' + str(sent_page)
+    sprevious_page = 'messages/?received=' + str(received_page) + '&sent=' + str(sent_page - 1)
+    snext_page = 'messages/?received=' + str(received_page) + '&sent=' + str(sent_page + 1)
+    context = {'received': received, 'sent': sent, 'rprevious_page': rprevious_page, 'rnext_page': rnext_page, 'sprevious_page': sprevious_page, 'snext_page': snext_page,
+    'is_rpp': is_rpp, 'is_rnp': is_rnp, 'is_spp': is_spp, 'is_snp': is_snp}
+    return render(request, 'website/messages.html', context)
 
 
 def sendmessage(request):
