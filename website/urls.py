@@ -15,6 +15,7 @@ urlpatterns = [
     path('nemoney', nemoney, name='nemoney'),
     path('guilds', guilds, name='guilds'),
     path('forum', forum, name='forum'),
+    path('friends', friends, name='friends'),
     path('messages', messages, name='messages'),
     path('sendmessage', sendmessage, name='sendmessage'),
     path('settings', settings, name='settings'),

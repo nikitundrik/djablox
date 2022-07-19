@@ -21,7 +21,15 @@ def games(request):
 
 def user(request, user_id):
     user = User.objects.get(pk=user_id)
-    context = {'user1': user}
+    items = user.owns.split(', ')
+    items.remove('')
+    print(items)
+    items1 = list()
+    for item in items:
+        print(item)
+        item_object = Item.objects.get(name__exact=item)
+        items1.append(item_object)
+    context = {'user1': user, 'items': items1}
     return render(request, 'website/user.html', context)
 
 
@@ -115,11 +123,15 @@ def forum(request):
     return render(request, 'website/forum.html')
 
 
+def friends(request):
+    return render(request, 'website/friends.html')
+
+
 def messages(request):
     received_page = int(request.GET.get('received', 0))
     sent_page = int(request.GET.get('sent', 0))
-    received = Message.objects.filter(receiver__icontains=request.user.username)[1 * received_page:10 * (received_page + 1)]
-    sent = Message.objects.filter(sender__icontains=request.user.username)[1 * sent_page:10 * (sent_page + 1)]
+    received = Message.objects.filter(receiver__icontains=request.user.id)[1 * received_page:10 * (received_page + 1)]
+    sent = Message.objects.filter(sender__icontains=request.user.id)[1 * sent_page:10 * (sent_page + 1)]
     is_rpp = False
     is_rnp = False
     is_spp = False

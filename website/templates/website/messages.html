@@ -16,7 +16,7 @@
 <h2>Messages received:</h2>
 {% for message in received %}
 <h3>{{ message.title }}</h3>
-<p>By {{ message.sender }}</p>
+<p>By {{ message.sender_name }}</p>
 <p>{{ message.content }}</p>
 <hr>
 {% endfor %}
@@ -29,8 +29,7 @@
 <h2>Messages sent:</h2>
 {% for message in sent %}
 <h3>{{ message.title }}</h3>
-<p>By {{ message.sender }}</p>
-<p>To {{ message.receiver }}</p>
+<p>To {{ message.receiver_name }}</p>
 <p>{{ message.content }}</p>
 <hr>
 {% endfor %}
