@@ -4,6 +4,7 @@ from django.db import models
 class User(AbstractUser):
     description = models.TextField(blank=True)
     owns = models.TextField(blank=True)
+    friends = models.TextField(blank=True)
     coin = models.IntegerField(default=0)
     materia = models.IntegerField(default=0)
 
@@ -27,11 +28,6 @@ class Message(models.Model):
     title = models.CharField(max_length=150)
     content = models.TextField()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.sender_name = User.objects.get(pk=self.sender).username
-        self.receiver_name = User.objects.get(pk=self.receiver).username
-
     def __str__(self):
         return self.title
 
@@ -40,10 +36,6 @@ class FriendRequest(models.Model):
     sender_name = models.CharField(max_length=150)
     receiver = models.IntegerField()
     receiver_name = models.CharField(max_length=150)
-
-    def __init__(self):
-        self.sender_name = User.objects.get(pk=self.sender).username
-        self.receiver_name = User.objects.get(pk=self.receiver).username
 
     def __str__(self):
         return str(self.sender)

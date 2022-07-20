@@ -1,5 +1,36 @@
 {% extends 'base.html' %}
 {% block title %}Friends{% endblock %}
 {% block content %}
-<h1>This feature is in development</h1>
+<h1>Friends</h1>
+<h2>Your friends:</h2>
+{% for friend in friends %}
+<h3><a href='/user/{{ friend.id }}'>{{ friend.username }}</a></h3>
+<hr>
+{% endfor %}
+{% if is_fpp %}
+<a href='{{ fprevious_page }}'></a>
+{% endif %}
+{% if is_fnp %}
+<a href='{{ fnext_page }}'></a>
+{% endif %}
+<h2>Send a friend request:</h2>
+<form action='/sendrequest' method='post'>
+    {% csrf_token %}
+    <p>User</p>
+    <input type='text' id='user' name='user'>
+    <input type='submit' value='Send'>
+</form>
+<h2>Friend requests:</h2>
+{% for request in requests %}
+<h3>Request from {{ request.sender_name }}</h3>
+<a href='/acceptrequest/{{ request.id }}'>Accept</a>
+<a href='/declinerequest/{{ request.id }}'>Decline</a>
+<hr>
+{% endfor %}
+{% if is_rpp %}
+<a href='{{ rprevious_page }}'></a>
+{% endif %}
+{% if is_rnp %}
+<a href='{{ rnext_page }}'></a>
+{% endif %}
 {% endblock %}

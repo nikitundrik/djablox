@@ -124,7 +124,50 @@ def forum(request):
 
 
 def friends(request):
-    return render(request, 'website/friends.html')
+    friends_page = int(request.GET.get('friends', 0))
+    requests_page = int(request.GET.get('requests', 0))
+    friend_names = request.user.friends.split(', ')[10 * friends_page:10 * (friends_page + 1)]
+    friend_names.remove('')
+    friends = list()
+    for friend in friend_names:
+        friend1 = User.objects.get(username__exact=friend)
+        friends.append(friend1)
+    friend_requests = FriendRequest.objects.filter(receiver__exact=request.user.id)[10 * requests_page:10 * (requests_page + 1)]
+    is_fpp = False
+    is_fnp = False
+    is_rpp = False
+    is_rnp = False
+    fprevious_page = '/friends/?friends=' + str(friends_page - 1) + '&request=' + str(requests_page)
+    fnext_page = '/friends/?friends=' + str(friends_page + 1) + '&request=' + str(requests_page)
+    rprevious_page = '/friends/?friends=' + str(friends_page) + '&request=' + str(requests_page - 1)
+    rnext_page = '/friends/?friends=' + str(friends_page) + '&request=' + str(requests_page + 1)
+    context = {'friends': friends, 'requests': friend_requests, 'is_fpp': is_fpp, 'is_fnp': is_fnp, 'is_rpp': is_rpp, 'is_rnp': is_rnp,
+    'fprevious_page': fprevious_page, 'fnext_page': fnext_page, 'rprevious_page': rprevious_page, 'rnext_page': rnext_page}
+    return render(request, 'website/friends.html', context)
+
+
+def sendrequest(request):
+    receiver = User.objects.get(username__exact=request.POST['user'])
+    request = FriendRequest(sender=request.user.id, sender_name=request.user.username, receiver=receiver.id, receiver_name=request.POST['user'])
+    request.save()
+    return redirect('/friends')
+
+
+def acceptrequest(request, request_id):
+    friend_request = FriendRequest.objects.get(pk=request_id)
+    user = User.objects.get(pk=friend_request.sender)
+    request.user.friends += user.username + ', '
+    user.friends += request.user.username + ', '
+    request.user.save()
+    user.save()
+    friend_request.delete()
+    return redirect('/friends')
+
+
+def declinerequest(request, request_id):
+    friend_request = FriendRequest.objects.get(pk=request_id)
+    friend_request.delete()
+    return redirect('/friends')
 
 
 def messages(request):
@@ -136,17 +179,18 @@ def messages(request):
     is_rnp = False
     is_spp = False
     is_snp = False
-    rprevious_page = 'messages/?received=' + str(received_page - 1) + '&sent=' + str(sent_page)
-    rnext_page = 'messages/?received=' + str(received_page + 1) + '&sent=' + str(sent_page)
-    sprevious_page = 'messages/?received=' + str(received_page) + '&sent=' + str(sent_page - 1)
-    snext_page = 'messages/?received=' + str(received_page) + '&sent=' + str(sent_page + 1)
+    rprevious_page = '/messages/?received=' + str(received_page - 1) + '&sent=' + str(sent_page)
+    rnext_page = '/messages/?received=' + str(received_page + 1) + '&sent=' + str(sent_page)
+    sprevious_page = '/messages/?received=' + str(received_page) + '&sent=' + str(sent_page - 1)
+    snext_page = '/messages/?received=' + str(received_page) + '&sent=' + str(sent_page + 1)
     context = {'received': received, 'sent': sent, 'rprevious_page': rprevious_page, 'rnext_page': rnext_page, 'sprevious_page': sprevious_page, 'snext_page': snext_page,
     'is_rpp': is_rpp, 'is_rnp': is_rnp, 'is_spp': is_spp, 'is_snp': is_snp}
     return render(request, 'website/messages.html', context)
 
 
 def sendmessage(request):
-    message = Message(sender=request.user.username, receiver=request.POST['receiver'], title=request.POST['title'], content=request.POST['content'])
+    receiver1 = User.objects.get(username__exact=request.POST['receiver'])
+    message = Message(sender=request.user.id, sender_name=request.user.username, receiver=receiver1.id, receiver_name=request.POST['receiver'], title=request.POST['title'], content=request.POST['content'])
     message.save()
     return redirect('/messages')
 
