@@ -13,6 +13,6 @@
 </form>
 <h2>Most popular guilds:</h2>
 {% for guild in guilds %}
-<a href='/guild/{{ guild.id }}'></a>
+<h1><a href='/guild/{{ guild.id }}'>{{ guild.name }}</a></h1>
 {% endfor %}
 {% endblock %}
