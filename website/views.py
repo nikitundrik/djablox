@@ -116,7 +116,45 @@ def nemoney(request):
 
 
 def guilds(request):
-    return render(request, 'website/guilds.html')
+    guilds = Guild.objects.order_by('-member_amount')[0:10]
+    context = {'guilds': guilds}
+    return render(request, 'website/guilds.html', context)
+
+
+def guild(request, guild_id):
+    class GuildMember:
+        def __init__(self, name, rank, is_owner, is_admin, account_id):
+            self.name = name,
+            self.rank = rank,
+            self.is_owner = is_owner
+            self.is_admin = is_admin
+            self.account_id = account_id
+    guild = Guild.objects.get(pk=guild_id)
+    guild.members.replace('(', '')
+    guild.members.replace(')', '')
+    members_names = guild.members.split(', ')[::2]
+    members_ranks = guild.members.split(', ')[1::2]
+    members = list()
+    for i in range(len(members_names)):
+        is_owner = False
+        is_admin = False
+        account_id = User.objects.get(username__exact=members_names[i]).id
+        if members_ranks[i] == 'Owner':
+            is_owner = True
+        if members_ranks[i] == 'Admin':
+            is_admin = True
+        member = GuildMember(members_names[i], members_ranks[i], is_owner, is_admin, account_id)
+        members.append(member)
+    context = {'members': members}
+    return render(request, 'website/guild.html', context)
+
+
+def createguild(request):
+    guild = Guild(name=request.POST['name'], description=request.POST['description'], members='(' + request.user.username + ', Owner), ')
+    guild.save()
+    request.user.coin -= 10
+    request.user.save()
+    return redirect('/guild/' + str(guild.id))
 
 
 def forum(request):

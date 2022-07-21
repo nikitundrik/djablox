@@ -1,5 +1,18 @@
 {% extends 'base.html' %}
-{% block title %}Games{% endblock %}
+{% block title %}Guilds{% endblock %}
 {% block content %}
-<p>This feature is TBA</p>
+<h1>Guilds</h1>
+<h2>Create a guild (creation fee: 10 coins)</h2>
+<form action='/createguild' method='post'>
+    {% csrf_token %}
+    <p>Name</p>
+    <input type='text' id='name' name='name'>
+    <p>Description</p>
+    <textarea rows='5' cols='50' name='description' placeholder='Description'></textarea>
+    <input type='submit' value='Create'>
+</form>
+<h2>Most popular guilds:</h2>
+{% for guild in guilds %}
+<a href='/guild/{{ guild.id }}'></a>
+{% endfor %}
 {% endblock %}

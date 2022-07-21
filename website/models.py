@@ -38,4 +38,13 @@ class FriendRequest(models.Model):
     receiver_name = models.CharField(max_length=150)
 
     def __str__(self):
-        return str(self.sender)
+        return self.sender
+
+class Guild(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+    member_amount = models.IntegerField(default=1)
+    members = models.TextField()
+
+    def __str__(self):
+        return self.name

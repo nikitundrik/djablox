@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}{{ guild.name }}{% endblock %}
+{% block content %}
+<h1>{{ guild.name }}</h1>
+<h2>{{ guild.member_amount }} members</h2>
+<p>{{ guild.description }}</p>
+<h2>Members:</h2>
+{% for member in members %}
+<h3><a href='/user/{{ member.account_id }}'>{{ member.name }}</a> ({{ member.rank }})
+{% if user_admin %}
+{% if member.is_owner %}
+{% elif member.is_admin %}
+<a href='/demoteuser/{{ guild.id }}/{{ member.account_id }}'>Demote user</a>
+{% else %}
+<a href='/promoteuser/{{ guild.id }}/{{ member.account_id }}'>Promote user</a>
+{% endif %}
+{% endif %}</h3>
+{% endfor %}
+{% endblock %}
