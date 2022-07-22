@@ -6,14 +6,18 @@
 <p>{{ guild.description }}</p>
 <h2>Members:</h2>
 {% for member in members %}
-<h3><a href='/user/{{ member.account_id }}'>{{ member.name }}</a> ({{ member.rank }})
-{% if user_admin %}
+<h3><a href='/user/{{ member.account.id }}'>{{ member.account.username }}</a></h3>
 {% if member.is_owner %}
+<p>The member is an owner</p>
 {% elif member.is_admin %}
-<a href='/demoteuser/{{ guild.id }}/{{ member.account_id }}'>Demote user</a>
-{% else %}
-<a href='/promoteuser/{{ guild.id }}/{{ member.account_id }}'>Promote user</a>
+<p>The member is an admin</p>
+{% if is_user_admin %}
+{% if member.is_admin %}
+<p><a href='/demote/{{ guild.id }}/{{ member.account.id }}'>Demote the user</a></p>
+{% else%}
+<p><a href='/promote/{{ guild.id }}/{{ member.account.id }}'>Promote the user</a></p>
 {% endif %}
-{% endif %}</h3>
+{% endif %}
+{% endif %}
 {% endfor %}
 {% endblock %}

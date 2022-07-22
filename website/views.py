@@ -123,38 +123,48 @@ def guilds(request):
 
 def guild(request, guild_id):
     class GuildMember:
-        def __init__(self, name, rank, is_owner, is_admin, account_id):
+        def __init__(self, name, rank, is_owner, is_admin, account):
             self.name = name,
             self.rank = rank,
             self.is_owner = is_owner
             self.is_admin = is_admin
-            self.account_id = account_id
+            self.account = account
     guild = Guild.objects.get(pk=guild_id)
-    guild.members.replace('(', '')
-    guild.members.replace(')', '')
     members_names = guild.members.split(', ')[::2]
+    members_names.remove('')
     members_ranks = guild.members.split(', ')[1::2]
     members = list()
+    is_user_admin = False
     for i in range(len(members_names)):
         is_owner = False
         is_admin = False
-        account_id = User.objects.get(username__exact=members_names[i]).id
-        if members_ranks[i] == 'Owner':
+        new_name = members_names[i].replace('(', '')
+        new_rank = members_ranks[i].replace(')', '')
+        print(members_names)
+        print(members_ranks)
+        if new_rank == 'Owner':
             is_owner = True
-        if members_ranks[i] == 'Admin':
+            if request.user.username == new_name:
+                is_user_admin = True
+        if new_rank == 'Admin':
             is_admin = True
-        member = GuildMember(members_names[i], members_ranks[i], is_owner, is_admin, account_id)
+            if request.user.username == new_name:
+                is_user_admin = True
+        member = GuildMember(new_name, new_rank, is_owner, is_admin, User.objects.get(username__exact=new_name))
         members.append(member)
-    context = {'members': members}
+    context = {'guild': guild, 'members': members, 'is_user_admin': is_user_admin}
     return render(request, 'website/guild.html', context)
 
 
 def createguild(request):
     guild = Guild(name=request.POST['name'], description=request.POST['description'], members='(' + request.user.username + ', Owner), ')
     guild.save()
-    request.user.coin -= 10
-    request.user.save()
-    return redirect('/guild/' + str(guild.id))
+    if request.user.coin >= 10:
+        request.user.coin -= 10
+        request.user.save()
+        return redirect('/guild/' + str(guild.id))
+    else:
+        return redirect('/guilds')
 
 
 def forum(request):
