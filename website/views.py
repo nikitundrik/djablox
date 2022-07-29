@@ -131,17 +131,21 @@ def guild(request, guild_id):
             self.account = account
     guild = Guild.objects.get(pk=guild_id)
     members_names = guild.members.split(', ')[::2]
-    members_names.remove('')
+    try:
+        members_names.remove('')
+    except Exception:
+        pass
     members_ranks = guild.members.split(', ')[1::2]
+    print(members_names)
+    print(members_ranks)
     members = list()
     is_user_admin = False
+    user_joined = False
     for i in range(len(members_names)):
         is_owner = False
         is_admin = False
         new_name = members_names[i].replace('(', '')
         new_rank = members_ranks[i].replace(')', '')
-        print(members_names)
-        print(members_ranks)
         if new_rank == 'Owner':
             is_owner = True
             if request.user.username == new_name:
@@ -150,10 +154,45 @@ def guild(request, guild_id):
             is_admin = True
             if request.user.username == new_name:
                 is_user_admin = True
+        if new_name == request.user.username:
+            user_joined = True
         member = GuildMember(new_name, new_rank, is_owner, is_admin, User.objects.get(username__exact=new_name))
         members.append(member)
-    context = {'guild': guild, 'members': members, 'is_user_admin': is_user_admin}
+    context = {'guild': guild, 'members': members, 'is_user_admin': is_user_admin, 'user_joined': user_joined}
     return render(request, 'website/guild.html', context)
+
+
+def joinguild(request, guild_id):
+    guild = Guild.objects.get(pk=guild_id)
+    guild.member_amount += 1
+    guild.members += '(' + request.user.username + ', Member), '
+    guild.save()
+    return redirect('/guild/' + str(guild_id))
+
+
+def leaveguild(request, guild_id):
+    guild = Guild.objects.get(pk=guild_id)
+    position = guild.members.find('(' + request.user.username)
+    final_pos = None
+    is_bracket = False
+    for i in range(position, len(guild.members)):
+        if guild.members[i] == ')':
+            is_bracket = True
+        elif guild.members[i] == ',' and is_bracket == True:
+            final_pos = i + 1
+    substr = guild.members[position:final_pos]
+    guild.members = guild.members.replace(substr, '')
+    guild.member_amount -= 1
+    guild.save()
+    return redirect('/guild/' + str(guild_id))
+
+
+def promote(request, guild_id, user_id):
+    pass
+
+
+def demote(request, guild_id, user_id):
+    pass
 
 
 def createguild(request):

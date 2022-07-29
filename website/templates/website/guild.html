@@ -1,23 +1,28 @@
 {% extends 'base.html' %}
 {% block title %}{{ guild.name }}{% endblock %}
 {% block content %}
-<h1>{{ guild.name }}</h1>
-<h2>{{ guild.member_amount }} members</h2>
-<p>{{ guild.description }}</p>
-<h2>Members:</h2>
-{% for member in members %}
-<h3><a href='/user/{{ member.account.id }}'>{{ member.account.username }}</a></h3>
-{% if member.is_owner %}
-<p>The member is an owner</p>
-{% elif member.is_admin %}
-<p>The member is an admin</p>
-{% if is_user_admin %}
-{% if member.is_admin %}
-<p><a href='/demote/{{ guild.id }}/{{ member.account.id }}'>Demote the user</a></p>
-{% else%}
-<p><a href='/promote/{{ guild.id }}/{{ member.account.id }}'>Promote the user</a></p>
-{% endif %}
-{% endif %}
-{% endif %}
-{% endfor %}
+    <h1>{{ guild.name }}</h1>
+    <h2>{{ guild.member_amount }} members</h2>
+    {% if user_joined %}
+        <h2><a href='/leaveguild/{{ guild.id }}'>Leave</a></h2>
+    {% else %}
+        <h2><a href='/joinguild/{{ guild.id }}'>Join</a></h2>
+    {% endif %}
+        <p>{{ guild.description }}</p>
+        <h2>Members:</h2>
+    {% for member in members %}
+        <h3><a href='/user/{{ member.account.id }}'>{{ member.account.username }}</a></h3>
+        {% if member.is_owner %}
+            <p>The member is an owner</p>
+        {% elif member.is_admin %}
+            <p>The member is an admin</p>
+        {% endif %}
+        {% if is_user_admin %}
+            {% if member.is_admin %}
+                <p><a href='/demote/{{ guild.id }}/{{ member.account.id }}'>Demote the user</a></p>
+            {% else %}
+                <p><a href='/promote/{{ guild.id }}/{{ member.account.id }}'>Promote the user</a></p>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
 {% endblock %}
